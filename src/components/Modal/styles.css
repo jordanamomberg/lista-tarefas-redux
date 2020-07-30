@@ -1,0 +1,49 @@
+.new-task-container {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.80);
+}
+
+.new-task-container .content {
+    width: 100%;
+    max-width: 500px;
+    padding: 96px;
+    background: #333;
+    box-shadow: 0 0 100px rgba(255, 20, 147, 0.25);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.new-task-container .close {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.new-task-container .content form {
+    width: 100%;
+    max-width: 450px;
+}
+
+.new-task-container .content form input,
+.new-task-container .content form textarea {
+    margin-top: 8px;
+}
+
+.MuiTypography-body1 {
+    color: #c3c3c3;
+}
