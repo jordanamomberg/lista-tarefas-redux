@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { FiX } from "react-icons/fi";
 import { toast } from "react-toastify";
 import {
@@ -9,21 +9,22 @@ import {
   RadioGroup,
 } from "@material-ui/core";
 
-// import { connect } from 'react-redux';
-// import { addTodo } from '../../Store/actions/actionCreators';
-
 import api from "../../services/api";
+import * as actions from '../../Store/actions/actionCreators';
+
 
 import "./styles.css";
 
 import { connect } from "react-redux";
 import { addTodo } from '../../Store/actions/actionCreators';
 
-const Modal = ({ dados, id = "modal", onClose = () => {}, children, ...rest }) => {
-  // const [title, setTitle] = useState(dados.title);
-  // const [description, setDescription] = useState(dados.description);
-  // const [status, setStatus] = useState(dados.status);
-  const { title, description } = rest;
+   
+const Modal = ({id = "modal", onClose = () => {}, children, todo, ...props }) => {
+ 
+  console.log(todo)
+  const [title, setTitle] = useState(todo ? todo.titulo : '');
+  const [description, setDescription] = useState(todo ? todo.descricao : '');
+  const [status, setStatus] = useState(todo ? todo.concluido : '');
 
   const handleOutsideClose = (e) => {
     if (e.target.id === id) onClose();
@@ -32,21 +33,25 @@ const Modal = ({ dados, id = "modal", onClose = () => {}, children, ...rest }) =
   async function handleNewTask(e) {
     e.preventDefault();
 
-    // const data = {
-    //   titulo,
-    //   descricao,
-    //   concluido,
+      const dataToSendApi = {
+        titulo: title,
+        descricao: description,
+        concluido: status,
+      }
 
 
     try {
-      if (dados.id) {
-        api.put(`/tarefas/${dados.id}`);
+      if (id){
+        await api.put(`/tarefas/${id}`);
+        props.editTodo(dataToSendApi, id)
         toast.success("Tarefa Alterada com sucesso!");
       } else {
-         api.post("/tarefas");
+        const {data} = await api.post("/tarefas", dataToSendApi);
+        props.addTodo(data)
         toast.success("Tarefa cadastrada com sucesso!");
       }
     } catch (err) {
+      console.log(err)
       toast.error("Erro! Tente novamente.");
     }
     onClose();
@@ -64,24 +69,24 @@ const Modal = ({ dados, id = "modal", onClose = () => {}, children, ...rest }) =
             <input
               placeholder="Título"
               value={title}
-              onChange={e => rest.addTodosLista(+e.target.value)}
+              onChange={e => setTitle(e.target.value)}
             />
 
             <textarea
               placeholder="Descrição"
               value={description}
-              onChange={e => rest.addTodosLista(+e.target.value)}
+              onChange={e => setDescription(e.target.value)}
             />
 
             {/* RADIO BUTTON */}
 
-            {/* <FormControl component="fieldset">
+             <FormControl component="fieldset">
               <FormLabel component="legend">Concluido</FormLabel>
-              <RadioGroup onChange={(+e.target.value)}>
+              <RadioGroup value={String(status)} onChange={(e) => setStatus(e.target.value)}>
                 <FormControlLabel value="1" control={<Radio />} label="Sim" />
                 <FormControlLabel value="0" control={<Radio />} label="Não" />
               </RadioGroup>
-            </FormControl> */}
+            </FormControl>
 
             {/* <SELECT></SELECT> */}
 
@@ -97,7 +102,7 @@ const Modal = ({ dados, id = "modal", onClose = () => {}, children, ...rest }) =
 
 
               <button className="button">
-                {dados.id ? 'Salvar alterações' : 'Cadastrar'}
+                {id ? 'Salvar alterações' : 'Cadastrar'}
               </button>
 
           </form>
@@ -106,20 +111,21 @@ const Modal = ({ dados, id = "modal", onClose = () => {}, children, ...rest }) =
     );
   };
 
-function mapStateToProps(state) {
-  console.log(state)
-  return {
-    Modal: state.tabela,
+function mapStateToProps(state, props){
+  return { 
+    todo: state.todos.data.find(task => task.id === Number(props.id))
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addTodosLista(novoNumero) {
-      //action creator => action
-      const action = addTodo(novoNumero)
-      dispatch(action)
-    }
+function mapDispatchToProps(dispatch) { 
+  return { 
+    addTodo(todo){
+      dispatch(actions.addTodo([todo]))
+    },
+    editTodo(todo, id){
+      dispatch(actions.editTodo(todo, id))
+    },
+
   }
 }
 

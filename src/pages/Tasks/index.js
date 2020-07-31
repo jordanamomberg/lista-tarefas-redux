@@ -13,52 +13,37 @@ import Modal from "../../components/Modal";
 import api from "../../services/api";
 
 import { connect } from 'react-redux';
-import { addTodo } from '../../Store/actions/actionCreators';
+import * as actions from '../../Store/actions/actionCreators';
 
 import "./styles.css";
 
-function Tasks() {
-  const [listTasks, setListTasks] = useState([]);
+function Tasks(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [editData, setEditData] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-
-  useEffect(() => {
-    setFiltered(listTasks)
-  }, [listTasks]);
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     api.get("/tarefas").then((response) => {
-      setListTasks(response.data);
+      props.setTodos(response.data);
     });
 
 
-  }, [isModalVisible]);
+  }, []);
 
-  function todasTasks(palavra) {
-    listTasks.map((listTask) => {
-      console.log(listTask.titulo.includes(palavra));
-    });
-  }
 
-  function handleNewTask() {
-    setEditData([]);
-    setIsModalVisible(true);
-  }
-
-  function handleEditTask(id, data) {
-    setEditData({ id, ...data });
+  function handleEditTask(id) {
+    setEditId(id);
     setIsModalVisible(true);
   }
 
   async function handleDeleteTask(id) {
     try {
       await api.delete(`/tarefas/${id}`);
+      
+      props.deleteTodo(id)
       toast.success("Excluído com sucesso!");
-
-      setListTasks(listTasks.filter((task) => task.id !== id));
     } catch (err) {
+      console.log(err)
       toast.error("Erro! Tente novamente.");
     }
   }
@@ -66,7 +51,10 @@ function Tasks() {
   return (
     <>
       {isModalVisible ? (
-        <Modal dados={editData} onClose={() => setIsModalVisible(false)} />
+        <Modal id={editId} onClose={() => {
+          setIsModalVisible(false)
+          setEditId(null)
+        }} />
       ) : null}
       <div className="task-container">
         <h1>
@@ -80,7 +68,7 @@ function Tasks() {
           </a>
         </h1>
 
-        {isSearchVisible && (
+        {/* {isSearchVisible && (
           <section>
             <input
               className="search-input"
@@ -88,10 +76,10 @@ function Tasks() {
               onChange={(e) => todasTasks(e.target.value)}
             />
           </section>
-        )}
+        )} */}
 
         <ul>
-          {filtered.map((task) => (
+          {props.todos.map((task) => (
             <li key={task.id}>
               <strong>Título:</strong>
               <p>{task.titulo}</p>
@@ -137,7 +125,7 @@ function Tasks() {
         </ul>
 
         <footer>
-          <a className="button" onClick={() => handleNewTask()}>
+          <a className="button" onClick={() => setIsModalVisible(true)}>
             Nova tarefa
           </a>
         </footer>
@@ -147,19 +135,26 @@ function Tasks() {
 }
  
 function mapStateToProps(state) { 
-  console.log(state)
+  console.log("mapStateToProps", state) 
   return {
-    Modal: state.tabela,
+    todos: state.todos.data,
   }
 }
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    addTodosLista(novoNumero) {
-      //action creator => action
-      const action = addTodo(novoNumero)
-      dispatch(action)
+    setTodos(todos){
+      dispatch(actions.addTodo(todos))
+    },
+    // addTodo(novoNumero) {
+    //   //action creator => action
+    //   const action = addTodo(novoNumero)
+    //   dispatch(action)
+    // },
+    deleteTodo(id) {
+      dispatch(actions.deleteTodo(id))
     }
+
   }
 }
 
