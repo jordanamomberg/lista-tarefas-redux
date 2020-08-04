@@ -5,10 +5,6 @@ const initialState = {
   todoSearchResult: []
 }
 
-const getTodoFilterResult = (todos, search ) => {
-  return search !== '' ? todos.filter(t => t.descricao?.includes(search) || t.titulo?.includes(search)) : []
-}
-
 const todos = (state = initialState, action) => {
     console.log(action)
     switch (action.type) {
