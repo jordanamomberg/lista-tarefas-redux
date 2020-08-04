@@ -3,14 +3,7 @@ import { createStore, combineReducers } from 'redux';
 import todos from './reducers/todos'
 
 const reducers= combineReducers({
-    todos: todos, 
-        // console.log("Reducer chamando...")
-        // console.log(state, ' ', action)
-        // return { 
-        //     title: "", 
-        //     description: "",   
-    //     }
-    // }
+    todos: todos
 })
 
 function storeConfig() {

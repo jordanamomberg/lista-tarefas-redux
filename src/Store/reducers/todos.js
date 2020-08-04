@@ -1,7 +1,12 @@
-import { findDOMNode } from "react-dom";
 
 const initialState = { 
   data: [], 
+  search: '',
+  todoSearchResult: []
+}
+
+const getTodoFilterResult = (todos, search ) => {
+  return search !== '' ? todos.filter(t => t.descricao?.includes(search) || t.titulo?.includes(search)) : []
 }
 
 const todos = (state = initialState, action) => {
@@ -26,7 +31,21 @@ const todos = (state = initialState, action) => {
             return {
               ...state,
               data: todosNew 
-            }
+            };
+      case 'TODO_SEARCH': 
+            console.log(action.payload)
+            return {
+              ...state,
+              search: action.payload
+              // todoSearchResult: getTodoFilterResult(state.todos, action.payload)
+          };
+
+      // description: 'Ler livro'
+      // list: [{
+      //   _id: 1, 
+      //   description: 'Pagar a fatura do cartão', 
+      //   done: true                              
+      // }] 
       default:
         return state
     }
