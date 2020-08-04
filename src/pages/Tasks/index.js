@@ -166,7 +166,7 @@ function Tasks(props) {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Tarefas
+            Lista Tarefas
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
