@@ -21,7 +21,7 @@ function Tasks(props) {
 
   useEffect(() => {
     api.get("/tarefas").then((response) => {
-      this.props.setTodos(response.data);
+      props.setTodos(response.data);
     });
   }, []);
 
@@ -34,7 +34,7 @@ function Tasks(props) {
     try {
       await api.delete(`/tarefas/${id}`);
 
-      this.props.deleteTodo(id);
+      props.deleteTodo(id);
       toast.success("Excluído com sucesso!");
     } catch (err) {
       console.log(err);
@@ -71,13 +71,13 @@ function Tasks(props) {
             <input
               className="search-input"
               placeholder="Buscar..."
-              onChange={(e) => this.props.todoSearch(e.target.value)}
+              onChange={(e) => props.todoSearch(e.target.value)}
             />
           </section>
         )}
 
         <ul>
-          {this.props.todos.map((task) => (
+          {props.todos.map((task) => (
             <li key={task.id}>
               <strong>Título:</strong>
               <p>{task.titulo}</p>
