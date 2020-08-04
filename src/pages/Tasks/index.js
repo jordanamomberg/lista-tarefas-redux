@@ -123,6 +123,7 @@ function Tasks(props) {
   const mobileMenuId = "primary-search-account-menu-mobile";
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [editId, setEditId] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -155,7 +156,7 @@ function Tasks(props) {
 
   return (
     <>
-      <AppBar position="fixed">
+      {/* <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
@@ -182,9 +183,8 @@ function Tasks(props) {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
 
       {isModalVisible ? (
         <Modal
@@ -199,10 +199,25 @@ function Tasks(props) {
         <h1>
           <FiList className="list" size={28} color="#FF1493" />
           Lista de Tarefas
-          <a className="icone-search">
+          <a
+            className="icone-search"
+            onClick={() => setIsSearchVisible(!isSearchVisible)}
+            
+          >
             <FiSearch size={24} color="#FF1493" />
           </a>
         </h1>
+
+        {isSearchVisible && (
+          <section>
+            <input
+              className="search-input"
+              placeholder="Buscar..."
+              // onChange={(e) => todasTasks(e.target.value)}
+              onChange={(e) => props.todoSearch(e.target.value)}
+            />
+          </section>
+        )}
 
         {/* {isSearchVisible && (
           <section>
@@ -273,9 +288,14 @@ function Tasks(props) {
 function mapStateToProps(state) {
   console.log("mapStateToProps", state);
   return {
-    todos: !state.todos.search ? state.todos.data : state.todos.data.filter(item => {
-      return item.titulo.includes(state.todos.search) || item.descricao.includes(state.todos.search)
-    }),
+    todos: !state.todos.search
+      ? state.todos.data
+      : state.todos.data.filter((item) => {
+          return (
+            item.titulo.includes(state.todos.search) ||
+            item.descricao.includes(state.todos.search)
+          );
+        }),
   };
 }
 
@@ -288,8 +308,8 @@ function mapDispatchToProps(dispatch) {
       dispatch(actions.deleteTodo(id));
     },
     todoSearch(value) {
-      dispatch(actions.todoSearch(value))
-    }
+      dispatch(actions.todoSearch(value));
+    },
   };
 }
 
