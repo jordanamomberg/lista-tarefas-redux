@@ -2,7 +2,8 @@
 const initialState = { 
   data: [], 
   search: '',
-  todoSearchResult: []
+  todoSearchResult: [],
+  todos: [],
 }
 
 const todos = (state = initialState, action) => {

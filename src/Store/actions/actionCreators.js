@@ -1,4 +1,4 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO, TODO_SEARCH } from './actionTypes';
+import { ADD_TODO, DELETE_TODO, EDIT_TODO, TODO_SEARCH, THEME_CHANGE_COLORS, THEME_CHANGE_TYPE} from './actionTypes';
 import api from '../../services/api';
 import todos from '../reducers/todos';
 
@@ -32,4 +32,18 @@ export function todoSearch(value) {
     type: TODO_SEARCH,
     payload: value
   }
+}
+
+
+export function themeChangeColors(colors) {
+    return {
+        type: THEME_CHANGE_COLORS,
+        colors
+    }
+}
+
+export function themeChangeType() {
+    return {
+        type: THEME_CHANGE_TYPE
+    }
 }
