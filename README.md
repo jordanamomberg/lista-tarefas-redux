@@ -26,4 +26,4 @@ yarn dev
 
 ```
 
-![Tarefas](https://github.com/jordanamomberg/lista-tarefas/blob/master/lista.png?raw=true)
+![Lista](https://github.com/jordanamomberg/lista-tarefas/blob/master/lista.png?raw=true)
