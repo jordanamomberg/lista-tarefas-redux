@@ -31,7 +31,7 @@
 }
 
 .task-container section .search-input {
-    width: 467px;
+    width: 484px;
     height: 35px;
     border: none;
     background-color: #333;
@@ -48,6 +48,7 @@
   
 .task-container section .search-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
     font-size: 14px;
+    
 }
   
 .task-container section .search-input::placeholder {
@@ -59,6 +60,7 @@
     grid-gap: 24px;
     margin-top: 12px;
     list-style: none;
+    max-width: 484px;
 }
 
 .task-container ul li { 
@@ -66,8 +68,7 @@
     box-shadow: 0 0 50px rgba(255, 20, 147, 0.20);
     padding: 24px;
     position: relative;
-    width: 100%;
-    max-width: 467px;
+    
 }
 
 .task-container ul li p {
@@ -100,4 +101,3 @@
 .task-container ul li strong:not(:first-child) {
     margin-top: 32px;
 }
-    
